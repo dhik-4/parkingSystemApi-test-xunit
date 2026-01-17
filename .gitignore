@@ -1,1 +1,3 @@
 appsettings.Test.json
+bin/
+obj/

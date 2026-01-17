@@ -13,6 +13,9 @@
     <PackageReference Include="coverlet.collector" Version="6.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.22" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageReference Include="Selenium.WebDriver" Version="4.39.0" />
+    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="143.0.7499.19200" />
+    <PackageReference Include="Selenium.WebDriver.MSEdgeDriver" Version="141.0.3537.71" />
     <PackageReference Include="xunit" Version="2.5.3" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3" />
   </ItemGroup>
