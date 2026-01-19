@@ -1,15 +1,17 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using HtmlAgilityPack;
+using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Support.UI;
-using System.Text.Json;
+using ParkingSystemAPI.Models;
+using System.Xml;
 
 namespace ParkingSystemAPI.Test.xUnit
 {
     public class UnitTestSelenium1 : IDisposable
     {
-        private readonly IWebDriver driver;
+        private readonly IWebDriver chrome;
+        //private readonly IWebDriver msEdge;
         private readonly string _baseUrl;
 
         public UnitTestSelenium1()
@@ -23,45 +25,59 @@ namespace ParkingSystemAPI.Test.xUnit
             _baseUrl = config["CustomVariable:BaseUrlCall"];
 
             //this.driver = _driver;
-            driver = new ChromeDriver();
-            driver.Manage().Window.Maximize();
+            chrome = new ChromeDriver();
+            chrome.Manage().Window.Maximize();
 
-            //_config = factory.Services.GetRequiredService<IConfiguration>();
-            //_baseUrl = _config["CustomVariable:BaseUrlCall"];
+            //msEdge = new EdgeDriver();
+            //msEdge.Manage().Window.Maximize();
+
         }
 
 
         [Fact]
-        public void Open_Google_Work()
+        public void Open_Google_Test()
         {
-            driver.Navigate().GoToUrl("https://www.google.com");
+            chrome.Navigate().GoToUrl("https://www.google.com");
 
-            Assert.Contains("Google", driver.Title);
+            Assert.Contains("Google", chrome.Title);
 
             Thread.Sleep(3000);
         }
 
         [Fact]
-        public void APIVehicleGetTrial()
+        public void APIVehicle_Get()
         {
-            driver.Navigate().GoToUrl(_baseUrl + "api/vehicle");
+            chrome.Navigate().GoToUrl(_baseUrl + "api/vehicle");
 
             //var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
             //wait.Until(d => d != null);
 
-            string pageSrc = driver.PageSource;
+            string pageSrc = chrome.PageSource;
 
-            //Assert.Contains("\"ok\":false", driver.PageSource);
+            var doc = new HtmlDocument();
+            doc.LoadHtml(pageSrc);
+
+            string jsonStr = doc.DocumentNode
+                  .SelectSingleNode("//pre")
+                  .InnerText;
 
 
-            Thread.Sleep(3000);
+            var objVM = JsonConvert.DeserializeObject<List<VehicleMaster>>(jsonStr);
 
-            
+            Assert.NotNull(objVM);
+            Assert.True(objVM.Count > 0);
+
+            //Thread.Sleep(3000);
+
+
         }
 
         public void Dispose()
         {
-            driver.Quit();
+            if (chrome != null)
+            {
+                chrome.Quit();
+            }
         }
     }
 }
