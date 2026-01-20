@@ -44,6 +44,7 @@ namespace ParkingSystemAPI.Test.xUnit
             Thread.Sleep(3000);
         }
 
+        //sumber: https://www.marcusoft.net/2021/10/setting-up-selenium-web-automation-with-net-core.html
         [Fact]
         public void APIVehicle_Get()
         {
@@ -65,7 +66,7 @@ namespace ParkingSystemAPI.Test.xUnit
             var objVM = JsonConvert.DeserializeObject<List<VehicleMaster>>(jsonStr);
 
             Assert.NotNull(objVM);
-            Assert.True(objVM.Count > 0);
+            Assert.True(objVM.Count > 0, $"The current data count is {objVM.Count}");
 
             //Thread.Sleep(3000);
 
